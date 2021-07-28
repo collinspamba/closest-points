@@ -7,10 +7,10 @@ from .views import homepage
 
 
 # define the API
-class ClosestPointsSerializer(serializers.HyperlinkedModelSerializer):
+class ClosestPointsSerializer(serializers.ModelSerializer):
     class Meta:
         model = ClosestPoints
-        fields = ['points_submitted', 'closest_pair']
+        fields = ['points_string', 'closest_pair']
         read_only_fields = ['closest_pair']
 
 # define viewsets
