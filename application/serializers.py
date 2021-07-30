@@ -37,5 +37,9 @@ class ClosestPointsSerializer(serializers.ModelSerializer):
         if not isinstance(value, str) or len(value) < 11:
             raise serializers.ValidationError('Enter a valid points string')
 
+        # ensure we can convert it into the kind of list we want
+        if not calculate.generate_tuples_list_from_string(value):
+            raise serializers.ValidationError('Enter a valid points string')
+
         # is valid
         return value

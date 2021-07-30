@@ -55,6 +55,13 @@ def generate_tuples_list_from_string(points_string):
     # this should give us a list with individual items e.g. [1,2,3,4,...]
     delta=points_string.replace('(', '').replace(')','').split(',')
 
+    # for every element in this list ensure it can be converted to a float
+    for i in delta:
+        try:
+            float(i)
+        except ValueError:
+            return False # so that vaildation by the serializer fails
+
     # collect element pairs in the list into tuples
     points_list = list(zip(delta[0::2], delta[1::2]))
     return points_list

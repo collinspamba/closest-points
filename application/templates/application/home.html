@@ -1,3 +1,4 @@
+{% load static %}
 <!doctype html>
 <html lang="en">
     <head>
@@ -5,7 +6,47 @@
         <meta name="viewport" content="width=device-width;initial-scale=1">
         <title>Closest Points</title>
     </head>
-    <body>
-        <h1>Closest Points</h1>
+    <body style="margin: 0; font-family: sans-serif; font-size: 1rem;">
+        <nav style="background:#2C2C2C;padding: 15px;display: flex;border-top: 5px solid #A30000;">
+            <a href="{% url 'application:homepage' %}" style="font-size: 2rem;font-weight: 800;color: #fff;text-decoration: none;">Closest Points</a>
+            <div style="margin-left: auto;padding: 10px;">
+                <a href="{% url 'application:api:api-root' %}" style="text-decoration: none;padding: 10px;background: beige;border-radius: 4px;">View the API</a>
+                <a href="https://github.com/collinspamba/closest-points" style="margin-left: 15px;text-decoration: none;padding: 10px;background:gray ;border-radius: 4px;" target="_blank">
+                    View the Code
+                </a>
+            </div>
+        </nav>
+        <div style="padding: 0 15px;">
+            <h1>Summary</h1>
+            <p>
+                A Django application that contains an API <span style="font-style: italic;"><a href="{% url 'application:api:closestpoints-list' %}">closestpoints endpoint</a></span>
+                that accepts a string of comma separated points for example "(2,3), (1,1), (5,4), ..." and calculates the closest points pair. The API is built using the
+                <a href="">Django REST framework</a> library, a powerful and flexible toolkit for building Web APIs, and it handles all aspects of API URL generation and authentication.
+            </p>
+            <h2>How It Works</h2>
+            <p>
+                To find the closest points pair, we calculate the distance between all the distinct pairs - the pair with the shortest distance between them is the closest points pair.
+                The formula for calculating the distance between cartesian coordinates <span style="font-family: monospace; font-style: italic;">(p1, p2)</span>
+                and <span style="font-family: monospace; font-style: italic;">(q1, q2)</span> is given as: <img src="{% static 'application/formula.svg' %}" style="display: block;">
+            </p>
+            <p>
+                The closest points pair calculation is performed in the
+                <a href="https://github.com/collinspamba/closest-points/blob/master/application/calculate.py" target="_blank">calculate.py</a> module in these steps:
+                <ol>
+                    <li style="padding-bottom: 5px;">
+                        The submitted points string is validated to be a string like "(2,3), (1,1), (5,4), ..." and converted into a list.
+                        During validation, we check each item in the tuples to ensure that it can be converted to a float because they will be converted into floats
+                        when calculating the distances.
+                    </li>
+                    <li style="padding-bottom: 5px;">
+                        For each of the points in the list, we calculate the distance between that point and all other points in the list.
+                        So if a string "(2,3), (1,1), (5,4)" is submitted, we calculate and store the distances between (2,3) and (1,1), (2,3) and (5,4), and (1,1) and (5,4).
+                        Steps are taken at this point to ensure that the a given points pair is not calculated twice.
+                    </li>
+                    <li style="padding-bottom: 5px;">The collected distances are then sorted in ascending order, so the first pair will have the shortest distance, which becomes our result!</li>
+                </ol>
+            </p>
+            <p style="font-style: italic;">Note: To submit a points pair for calculation, you must have authentication credentials.</p>
+        </div>
     </body>
 </html>
