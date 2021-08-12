@@ -13,7 +13,7 @@ A python Django application that calculates the closest points pair from a comma
     2. `Debug = True` # only in development!
     3. `ALLOWED_HOSTS = ['127.0.0.1']` # for use with django's builtin web server: `python manage.py runserver`
 4. Install external packages: run `pip install -r requirements.txt` in the project root.
-5. Start the app using python manage.py runserver
+5. Start the app using `python manage.py runserver`
 
 # Documentation
 See https://closestpoints.buffalo.co.ke
