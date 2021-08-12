@@ -14,31 +14,19 @@ def closest_pair(points_string):
     # here we have a list containing tuples like (1,2),(3,4)
     # go through each tuple and calculate the distance with other tuples in the list
     distances = []
-    for p in points_list:
-        for q in points_list:
+    for p,x in enumerate(points_list):
+        for q,y in enumerate(points_list):
             # skip if p is q
-            if points_list.index(p) == points_list.index(q):
-                continue
-
-            # check if we have already calculated for these two points
-            exists = False
-            for d in distances:
-                if (d.get('p') or d.get('p') == 0) and (d.get('q') or d.get('q') == 0):
-                    if d['p'] == points_list.index(q) and d['q'] == points_list.index(p):
-                        exists = True
-                    if d['q'] == points_list.index(p) and d['p'] == points_list.index(q):
-                        exists = True
-
-            if exists:
+            if p == q:
                 continue
 
             # get the distance
-            distance = get_distance(p,q)
+            distance = get_distance(x,y)
 
             # append to distances
             distances.append({
-                'p': points_list.index(p),
-                'q': points_list.index(q),
+                'p': p,
+                'q': q,
                 'distance': distance
             })
 
@@ -46,7 +34,8 @@ def closest_pair(points_string):
     distances_sorted = sorted(distances, key=lambda d: d.get('distance'))
 
     # get the respective points_list items for distances_sorted's first item (lowest distance)
-    return points_list[distances_sorted[0]['p']], points_list[distances_sorted[0]['q']]
+    closest = points_list[distances_sorted[0]['p']], points_list[distances_sorted[0]['q']]
+    return str(closest[0]) + ',' + str(closest[1])
 
 def generate_tuples_list_from_string(points_string):
     """Take a string of points and return a list containing the tuples
@@ -56,14 +45,19 @@ def generate_tuples_list_from_string(points_string):
     delta=points_string.replace('(', '').replace(')','').split(',')
 
     # for every element in this list ensure it can be converted to a float
+    final = []
     for i in delta:
         try:
-            float(i)
+            item = float(i)
+            if item.is_integer():
+                final.append(int(i))
+            else:
+                final.append(item)
         except ValueError:
             return False # so that vaildation by the serializer fails
 
     # collect element pairs in the list into tuples
-    points_list = list(zip(delta[0::2], delta[1::2]))
+    points_list = list(zip(final[0::2], final[1::2]))
     return points_list
 
 def get_distance(p,q):
@@ -71,7 +65,7 @@ def get_distance(p,q):
     p and q are validated tuples e.g. (942,42),(1.4,93)
     """
     # formula for calculating distance between p and q
-    distance = math.sqrt(square(float(q[0]) - float(p[0])) + square(float(q[1]) - float(p[1])))
+    distance = math.sqrt(square(q[0] - p[0]) + square(q[1] - p[1]))
     return distance
 
 def square(x):

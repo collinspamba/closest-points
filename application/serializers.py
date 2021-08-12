@@ -1,8 +1,8 @@
 """Module to define our model serializer
 """
+from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
 from rest_framework import serializers
 from .models import ClosestPoints
-from . import calculate
 
 class ClosestPointsSerializer(serializers.ModelSerializer):
     """Serializer class for ClosestPoints model
@@ -20,26 +20,26 @@ class ClosestPointsSerializer(serializers.ModelSerializer):
         # the validated points string
         points_string = validated_data.get('points_string')
 
-        # calculate the closest pair
-        closest_pair =  calculate.closest_pair(points_string)
+        # create and save model instance
+        closest_points = ClosestPoints(points_string=points_string)
+        closest_points.save() # closest pair calculated here
 
-        # save the data
-        return ClosestPoints.objects.create(
-            points_string=points_string,
-            closest_pair=closest_pair
-        )
+        # return
+        return closest_points
 
     def validate_points_string(self, value):
         """Validate the points string submitted
         is what we expect
         """
-        # ensure its a string of points
-        if not isinstance(value, str) or len(value) < 11:
-            raise serializers.ValidationError('Enter a valid points string')
+        # use the validation on the model object
+        closest_point = ClosestPoints(points_string=value)
 
-        # ensure we can convert it into the kind of list we want
-        if not calculate.generate_tuples_list_from_string(value):
-            raise serializers.ValidationError('Enter a valid points string')
+        # passes value through to the Model.clean()
+        try:
+            closest_point.full_clean()
+        except ValidationError as e:
+            non_field_errors = e.message_dict[NON_FIELD_ERRORS]
+            raise serializers.ValidationError(non_field_errors[0])
 
         # is valid
         return value

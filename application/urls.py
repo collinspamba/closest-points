@@ -12,5 +12,5 @@ router.register(r'closestpoints', ClosestPointsViewSet)
 app_name = 'application'
 urlpatterns = [
     path('', HomePage.as_view(), name='homepage'), # home page
-    path('api/', include((router.urls, 'application'), namespace='api')), # api authentication
+    path('api/', include((router.urls, 'application'), namespace='api')), # api
 ]
