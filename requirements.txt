@@ -70,11 +70,7 @@ requests-unixsocket==0.2.0
 Send2Trash==1.8.0
 six==1.16.0
 sniffio==1.2.0
-<<<<<<< HEAD
 sqlparse==0.4.2
-=======
-sqlparse==0.4.1
->>>>>>> 284b3666525b1cebf4bc50b43b8369ff1a197b83
 terminado==0.10.1
 testpath==0.5.0
 toml==0.10.2
